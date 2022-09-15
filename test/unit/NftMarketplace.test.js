@@ -11,21 +11,15 @@ const { developmentChains } = require("../../helper-hardhat-config")
 
           beforeEach(async () => {
               accounts = await ethers.getSigners() // could also do with getNamedAccounts
-        //      console.log("got the signers" )
               deployer = accounts[0]
               user = accounts[1]
               await deployments.fixture(["all"])
-        //      console.log("got deployments.fixture")
               nftMarketplaceContract = await ethers.getContract("NftMarketplace")
-        //      console.log("got the nftMarketplaceContract")
               nftMarketplace = nftMarketplaceContract.connect(deployer)
               basicNftContract = await ethers.getContract("BasicNft")
               basicNft = await basicNftContract.connect(deployer)
-        //      console.log("got basicNft")
               await basicNft.mintNft()
-        //      console.log("minted basicNFT")
               await basicNft.approve(nftMarketplaceContract.address, TOKEN_ID)
-        //      console.log("approved")
           })
           afterEach(async () => {
             console.log("afterEach")
@@ -66,7 +60,12 @@ const { developmentChains } = require("../../helper-hardhat-config")
                   assert(listing.price.toString() == PRICE.toString())
                   assert(listing.seller.toString() == deployer.address)
               })
-          })
+              it("Attempt to list with price 0", async function () {
+                    await expect(
+                        nftMarketplace.listItem(basicNft.address, TOKEN_ID, 0)
+                    ).to.be.revertedWith("PriceMustBeAboveZero")
+              })
+      })
           describe("cancelListing", function () {
               it("reverts if there is no listing", async function () {
                   const error = `NotListed("${basicNft.address}", ${TOKEN_ID})`
@@ -139,7 +138,14 @@ const { developmentChains } = require("../../helper-hardhat-config")
                   const listing = await nftMarketplace.getListing(basicNft.address, TOKEN_ID)
                   assert(listing.price.toString() == updatedPrice.toString())
               })
-          })
+//              it("updates the price to ZERO should revert", async function () {
+//                    await nftMarketplace.listItem(basicNft.address, TOKEN_ID, PRICE)
+//                    const listing = await nftMarketplace.getListing(basicNft.address, TOKEN_ID)
+//                    expect(
+//                        await nftMarketplace.updateListing(basicNft.address, TOKEN_ID, 0)
+//                    ).to.be.revertedWith("PriceMustBeAboveZero")
+//                })
+        })
           describe("withdrawProceeds", function () {
               it("doesn't allow 0 proceed withdrawls", async function () {
                   await expect(nftMarketplace.withdrawProceeds()).to.be.revertedWith("NoProceeds")
