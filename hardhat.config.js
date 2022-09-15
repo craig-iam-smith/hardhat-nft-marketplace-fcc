@@ -16,6 +16,8 @@ const MAINNET_RPC_URL =
     "https://eth-mainnet.alchemyapi.io/v2/your-api-key"
 const RINKEBY_RPC_URL =
     process.env.RINKEBY_RPC_URL || "https://eth-rinkeby.alchemyapi.io/v2/your-api-key"
+const GOERLI_RPC_URL =
+    process.env.GOERLI_RPC_URL || "https://eth-goerli.alchemyapi.io/v2/your-api-key"
 const KOVAN_RPC_URL = process.env.KOVAN_RPC_URL || "https://eth-kovan.alchemyapi.io/v2/your-api-key"
 const POLYGON_MAINNET_RPC_URL =
     process.env.POLYGON_MAINNET_RPC_URL || "https://polygon-mainnet.alchemyapi.io/v2/your-api-key"
@@ -49,6 +51,16 @@ module.exports = {
             // },
             saveDeployments: true,
             chainId: 42,
+        },
+        goerli: {
+            url: GOERLI_RPC_URL,
+            accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+            //   accounts: {
+            //     mnemonic: MNEMONIC,
+            //   },
+            saveDeployments: true,
+            gas: 10000000,
+            chainId: 5,
         },
         rinkeby: {
             url: RINKEBY_RPC_URL,
@@ -102,6 +114,9 @@ module.exports = {
         },
         player: {
             default: 1,
+        },
+        player2: {
+            default: 2,
         },
     },
     solidity: {

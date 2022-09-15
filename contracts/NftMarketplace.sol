@@ -191,7 +191,7 @@ contract NftMarketplace is ReentrancyGuard {
     /////////////////////
     // Getter Functions //
     /////////////////////
-// Listing is a struct 
+
     function getListing(address nftAddress, uint256 tokenId)
         external
         view

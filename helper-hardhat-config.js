@@ -22,6 +22,9 @@ const networkConfig = {
         callbackGasLimit: "500000", // 500,000 gas
     
     },
+    5: {
+
+    },
     4: {
         name: "rinkeby",
         subscriptionId: "10469",
@@ -40,7 +43,7 @@ const networkConfig = {
     },
 }
 
-const developmentChains = ["hardhat", "localhost"]
+const developmentChains = ["hardhat", "localhost", "goerli"]
 const VERIFICATION_BLOCK_CONFIRMATIONS = 6
 const frontEndContractsFile = "../nextjs-smartcontract-lottery-fcc/constants/contractAddresses.json"
 const frontEndAbiFile = "../nextjs-smartcontract-lottery-fcc/constants/abi.json"

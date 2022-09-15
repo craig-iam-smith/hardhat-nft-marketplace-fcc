@@ -11,16 +11,25 @@ const { developmentChains } = require("../../helper-hardhat-config")
 
           beforeEach(async () => {
               accounts = await ethers.getSigners() // could also do with getNamedAccounts
+        //      console.log("got the signers" )
               deployer = accounts[0]
               user = accounts[1]
               await deployments.fixture(["all"])
+        //      console.log("got deployments.fixture")
               nftMarketplaceContract = await ethers.getContract("NftMarketplace")
+        //      console.log("got the nftMarketplaceContract")
               nftMarketplace = nftMarketplaceContract.connect(deployer)
               basicNftContract = await ethers.getContract("BasicNft")
               basicNft = await basicNftContract.connect(deployer)
+        //      console.log("got basicNft")
               await basicNft.mintNft()
+        //      console.log("minted basicNFT")
               await basicNft.approve(nftMarketplaceContract.address, TOKEN_ID)
+        //      console.log("approved")
           })
+          afterEach(async () => {
+            console.log("afterEach")
+        })
 
           describe("listItem", function () {
               it("emits an event after listing an item", async function () {
@@ -81,6 +90,10 @@ const { developmentChains } = require("../../helper-hardhat-config")
                   const listing = await nftMarketplace.getListing(basicNft.address, TOKEN_ID)
                   assert(listing.price.toString() == "0")
               })
+              it("gets non -existent listing", async function () {
+                const listing = await nftMarketplace.getListing(basicNft.address, TOKEN_ID)
+                assert(listing.price.toString() == "0")
+            })
           })
           describe("buyItem", function () {
               it("reverts if the item isnt listed", async function () {
